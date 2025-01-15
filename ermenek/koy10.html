@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .baslık {
+            margin-top: 20px;
+            font-size: 2em;
+            color: #555;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 60%;
+        }
+        .image {
+            width: 40%;
+            height: auto;
+            margin-right: 15px;
+            border-radius: 5px;
+        }
+        .button {
+            margin-left: 20px;
+            padding: 10px 20px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        .modal, .submenu-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            width: 80%;
+            max-width: 600px;
+            overflow-y: auto; /* İçeriğin kaymasını sağlar */
+            max-height: 80vh; /* Modalin yüksekliğini sınırlayıp kaydırma alanı sağlar */
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .submenu {
+            list-style: none;
+            padding: 0;
+        }
+        .submenu li {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            margin: 5px 0;
+            padding: 5px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .submenu li img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+        .submenu li:hover {
+            background: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="baslık">
+        <text>İKİZ ÇINAR</text>
+    </div>
+    <div class="container">
+        <div class="item">
+            <img src="RESIM/cografı ozelik.png" alt="Resim 1" class="image">
+            <button class="button" onclick="showModal(1)">COGRAFİ OZELİGİ</button>
+        </div>
+        <div class="item">
+            <img src="RESIM/tarih.png" alt="Resim 2" class="image">
+            <button class="button" onclick="showModal(2)">TARİHİ</button>
+        </div>
+        <div class="item">
+            <img src="RESIM/bitki.png" alt="Resim 3" class="image">
+            <button class="button" onclick="showSubMenu()">YATİSEN BİTKİLER</button>
+        </div>
+    </div>
+    
+    <div id="modal1" class="modal">
+        <button class="close-btn" onclick="closeModal()">✖</button>
+        <p>Köy, Karaman il merkezine 190 km, Ermenek ilçe merkezine 30 km uzaklıktadır.</p>
+    </div>
+    <div id="modal2" class="modal">
+        <button class="close-btn" onclick="closeModal()">✖</button>
+        <p>Yerleşimin adı, 451 yılı kayıtlarında Eirênópolis, 1522 yılı kayıtlarında İrneboli, 1914 yılı kayıtlarında ise Aşağı İrnebol olarak geçmektedir</p>
+    </div>
+    <div id="submenu-modal" class="modal submenu-modal">
+        <button class="close-btn" onclick="closeModal()">✖</button>
+        <ul class="submenu">
+            <li onclick="showPlantInfo('plant1')"><img src="RESIM/KUSBURMU.PNG" alt="Bitki 1">KUŞ BURNU</li>
+            <li onclick="showPlantInfo('plant2')"><img src="RESIM/ZENCEFİR.PNG" alt="Bitki 2">ZENCEFİL</li>
+        </ul>
+    </div>
+    <div id="plant-info-modal" class="modal">
+        <button class="close-btn" onclick="closeModal()">✖</button>
+        <div id="plant-info-content"></div>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <script>
+        function showModal(id) {
+            // Modal ve overlay'i göster
+            document.getElementById('modal' + id).style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+        function closeModal() {
+            // Modal ve overlay'i gizle
+            document.querySelectorAll('.modal').forEach(function(modal) {
+                modal.style.display = 'none';
+            });
+            document.getElementById('overlay').style.display = 'none';
+        }
+        function showSubMenu() {
+            // Alt menüyü göster
+            document.getElementById('submenu-modal').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+        function showPlantInfo(plantId) {
+            // Bitki bilgilerini göster
+            let content = '';
+            if (plantId === 'plant1') {
+                content = '<img src="RESIM/KUSBURMU.PNG" alt="KUŞ BURMU" style="width:80%; margin-bottom: 20px;"><p>Yüksek oranda C vitamini yanı sıra B1, B2 ve K vitamini yanı sıra antioksidan içeren kuşburnu bağışıklığı güçlendirir, öksürük ve boğaz ağrısı gibi üst solunum yolu semptomlarını hafifletir. Kolesterol ve tansiyonu dengelemeye yardım ederek kalp sağlığını korur. Kuşburnu, mide spazmı, ülser ve mide asidi gibi mide rahatsızlıklarını yatıştırması gibi faydaları bulunmaktadır. Kabızlık ve ishal gibi sindirim sorunlarına iyi gelir, eklem ağrılarını hafifletir, ödem atmayı kolaylaştırır ve ateşi düşürücü etkiye sahiptir. Kuşburnu, cilt hidrasyonu ve elastikiyetini artırır, kolajen üretimini artırır, serbest radikallerin verebileceği hasarı ve erken yaşlanmaya karşı korur. Cilt dokusunu ve tonunu iyileştiren ve pigmentasyonun tedavisine destek sağlayan bileşiklere sahiptir. İltihap tedavisi içinde destekçidir. C vitamini deposu olan kuşburnu faydaları şunlardır: Kuşburnu bağışıklığı güçlendirir Soğuk algınlığı semptomlarını hafifletir Eklem ve romatizma ağrılarını azaltır Cilt sağlığını korur Kalp sağlığını destekler Kuşburnu sindirimi iyileştirir Metabolizmayı hızlandırır Kan basıncını ve kan şekerini düzenler İltihabı önler</p>';
+            } else if (plantId === 'plant2') { 
+                content = '<img src="RESIM/ZENCEFİR.PNG" alt="ZENCEFİL" style="width:80%; margin-bottom: 20px;"><p>Zencefil mide şişkinliğine ve hazımsızlığa iyi gelir, gaz sıkışması ve kabızlığı giderir, mide bulantısını ve mide ağrısını azaltır, öksürüğü ve boğaz ağrısına iyi gelir, kas ağrılarını hafifletir, vücudu enfeksiyon ve mikroplara karşı korur. Kan şekerini düzenlemeye de yardım eden zencefil, kalp hastalıkları riskini azaltır ve adet öncesi gerginlik semptomlarını hafifletetir. Zencefilin faydaları genel olarak şunlardır: Zencefil soğuk algınlığı semptomlarını hafifletir Zencefil, hazımsızlık, gaz, şişkinlik gibi sindirim sorunlarına iyi gelir Kas ağrılarını dindirir Adet öncesi gerginlik sendromu ve regl ağrılarını hafifletir Zencefil çayı mide bulantısını yatıştırır Kan şekerini düzenler Öksürüğe ve boğaz ağrısına iyi gelir Kötü kolesterolü düşürür Antioksidan etkisiyle bağışıklığı güçlendirir Kalp hastalıkları riskini azaltır Anksiyete, depresyon ve travma sonrası stres bozukluğuna iyi gelir Mide ağrısını yatıştırır Bağırsak hareketlerini iyileştirip, ishal ve kabızlığı giderir Balgam söktürücüdür Kilo vermeye yardımcıdır Beyin fonksiyonlarını destekler Toksinlerin vücuttan atılmasını sağlar</p>';
+            } 
+
+            document.getElementById('plant-info-content').innerHTML = content;
+            document.getElementById('submenu-modal').style.display = 'none';
+            document.getElementById('plant-info-modal').style.display = 'block';
+        }
+        document.getElementById('overlay').onclick = closeModal;
+    </script>
+</body>
+</html>

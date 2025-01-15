@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .baslık {
+            margin-top: 20px;
+            font-size: 2em;
+            color: #555;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 60%;
+        }
+        .image {
+            width: 40%;
+            height: auto;
+            margin-right: 15px;
+            border-radius: 5px;
+        }
+        .button {
+            margin-left: 20px;
+            padding: 10px 20px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        .modal, .submenu-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            width: 80%;
+            max-width: 600px;
+            overflow-y: auto; /* İçeriğin kaymasını sağlar */
+            max-height: 80vh; /* Modalin yüksekliğini sınırlayıp kaydırma alanı sağlar */
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .submenu {
+            list-style: none;
+            padding: 0;
+        }
+        .submenu li {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            margin: 5px 0;
+            padding: 5px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .submenu li img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+        .submenu li:hover {
+            background: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="baslık">
+        <text>OLUKPINAR</text>
+    </div>
+    <div class="container">
+        <div class="item">
+            <img src="RESIM/cografı ozelik.png" alt="Resim 1" class="image">
+            <button class="button" onclick="showModal(1)">COGRAFİ OZELİGİ</button>
+        </div>
+        <div class="item">
+            <img src="RESIM/tarih.png" alt="Resim 2" class="image">
+            <button class="button" onclick="showModal(2)">TARİHİ</button>
+        </div>
+        <div class="item">
+            <img src="RESIM/bitki.png" alt="Resim 3" class="image">
+            <button class="button" onclick="showSubMenu()">YATİSEN BİTKİLER</button>
+        </div>
+    </div>
+    
+    <div id="modal1" class="modal">
+        <button class="close-btn" onclick="closeModal()">✖</button>
+        <p>Köy, Karaman il merkezine 213 km, Ermenek ilçe merkezine 38 km uzaklıktadır</p>
+    </div>
+    <div id="modal2" class="modal">
+        <button class="close-btn" onclick="closeModal()">✖</button>
+        <p>Köyün adı, 1914 yılı kayıtlarında Kapulu olarak geçmektedir.</p>
+    </div>
+    <div id="submenu-modal" class="modal submenu-modal">
+        <button class="close-btn" onclick="closeModal()">✖</button>
+        <ul class="submenu">
+            <li onclick="showPlantInfo('plant1')"><img src="RESIM/BOGURTLEN YAPRAGI.PNG" alt="Bitki 1">BÖGÜRTLEN YAPRAGI</li>
+            <li onclick="showPlantInfo('plant2')"><img src="RESIM/DEVE DİKENİ.PNG" alt="Bitki 2">DEVE DİKENİ</li>
+        </ul>
+    </div>
+    <div id="plant-info-modal" class="modal">
+        <button class="close-btn" onclick="closeModal()">✖</button>
+        <div id="plant-info-content"></div>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <script>
+        function showModal(id) {
+            // Modal ve overlay'i göster
+            document.getElementById('modal' + id).style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+        function closeModal() {
+            // Modal ve overlay'i gizle
+            document.querySelectorAll('.modal').forEach(function(modal) {
+                modal.style.display = 'none';
+            });
+            document.getElementById('overlay').style.display = 'none';
+        }
+        function showSubMenu() {
+            // Alt menüyü göster
+            document.getElementById('submenu-modal').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+        function showPlantInfo(plantId) {
+            // Bitki bilgilerini göster
+            let content = '';
+            if (plantId === 'plant1') {
+                content = '<img src="RESIM/BOGURTLEN YAPRAGI.PNG" alt="BÖGÜRTLEN YAPRAGI" style="width:80%; margin-bottom: 20px;"><p>satır arası Böğürtlen yaprağı faydaları, şifalı bitkilere ilginin artmasıyla birlikte merak edilen önemli konulardan biri haline gelmiştir. Bunun başlıca sebebi ise böğürtlen yaprağı çayına gösterilen ilgidir. Bitki çayları arasında sık tercih edilen ve sevilen böğürtlen yaprağı çayı, hem cilt hem de bağışıklık sistemi için çeşitli faydalar sunar. Bu sebeple de oldukça popülerdir ve özel olarak kış aylarında tüketilen bir bitki çayıdır. Düzenli böğürtlen çayı tüketimi ile kış aylarında enerjinizi korumanız ve uzun süre dinç kalmanız mümkündür. İçindekiler Böğürtlen Yaprağı Hakkında Böğürtlen Yaprağı Nasıl Kullanılır? Böğürtlen Yaprağı Faydaları Böğürtlen Yaprağı Kullanırken Dikkat Edilmesi Gerekenler Böğürtlen Yaprağı ile İlgili Sık Sorulan Sorular Böğürtlen Yaprağı Hakkında Böğürtlenin kökünden yaprağına kadar her bölümü faydalı olduğu için “Böğürtlen yaprağı faydaları nelerdir?” sorusu sıklıkla sorulur. Fakat faydalarından önce böğürtlen yaprağını yakından tanımak gerekir. Böğürtlen yaprağı, böğürtlen meyvesinin gövdesinin üzerinde bulunan yeşil renkli bir bölümdür. Fotosentez işlevini yerine getirmesi sebebiyle böğürtlen için oldukça önemlidir. Antioksidan bakımından zengin olmasıyla dikkat çeken böğürtlen yaprağı, pek çok meyve yaprağı gibi tüketilmesi halinde çeşitli faydaları da beraberinde getirir. Örneğin, ayva yaprağı gibi soğuk algınlığına karşı etkilidir. Öte yandan, böğürtlen gülgiller familyasına ait bir bitkidir. Yaprağının yapı olarak belirgin damarları, tüyleri ve dişleri vardır. Tüyler yaprağın alt kısmında yer alırken, dişler kenarlarda sıralı halde bulunur. Ayrıca böğürtlen dikenli bir gövdeye sahip olduğu için yapraklarının toplanması biraz zahmetli olabilir. Bu kapsamda dikenlerin daha yumuşak olduğu uç kısımlardaki küçük ve taze yapraklar tercih edilebilir. Böğürtlen yaprakları gövdeden yukarı doğru çıktıkça boyutu küçülür ve daha taze bir yapıya sahip olur. Böğürtlen Yaprağı Nasıl Kullanılır? Böğürtlen yaprağının nasıl tüketileceği, böğürtlen yaprağı faydaları kadar önemli bir konudur. Böğürtlen yaprağı da diğer bitki yaprakları gibi çay şeklinde tüketilebilir. Bu tip bitki çayları kış aylarında veya hastalık durumunda iyi bir şifa kaynağı olabilir. Örneğin, grip gibi hastalık durumlarında 1-2 fincan böğürtlen çayı içmek daha iyi hissettirebilir. Tercihe göre sabah-akşam olmak üzere farklı zaman dilimlerinde tüketilebilir. Tercihe göre gün içinde enerji vermesi için iş yerinde dahi böğürtlen yaprağı tüketilebilir. Böğürtlen çayı yapmak için ise ilk önce bir suyunu kaynatmak ve 1-2 dakika dinlendirmek gerekir. Ardından içerisine böğürtlen yaprakları koyulabilir. Eğer yapraklar taze ise tekrar kaynatmadan birkaç dakika demlemeye bırakmak gerekir. Fakat kuru yapraklardan böğürtlen çayı yapılacak ise yapraklar su ile birlikte birkaç dakika kaynatılabilir. Bu şekilde kaynatılan su kıvama geldiğinde koyu mora benzer bir renge bürünür. Ardından ocaktan alınarak dinlenmeye bırakılabilir. Tercihe göre de sıcak veya soğuk tüketilebilir. Hatta yaz aylarında lezzetli bir soğuk çay dahi yapılabilir. Böğürtlen Yaprağı Faydaları Böğürtlen yaprağı faydaları ile rahat bir kış mevsimi geçirmek mümkündür. Ihlamur çayı, zencefil çayı, ekinezya çayı, adaçayı, ve salep gibi soğuk algınlığına iyi gelen böğürtlen yaprağı, kış aylarında hastalıklardan korunmaya yardımcı olur. Bunun yanı sıra böğürtlen yaprağının faydaları şu şekilde sıralanabilir: Böğürtlen yaprağı, mandalina kabuğu gibi C vitamini açısından zengindir. Bağışıklığın güçlenmesine yardımcı olan C vitamini, hem cilt sağlığının korunması hem de yaraların iyileşmesi için destek sağlar. Grip, nezle ve bronşit gibi rahatsızlıklara karşı vücudun korunmasına yardımcı olur. Aynı zamanda bu rahatsızlıklarla birlikte gelen ağrı gibi kötü semptomları azaltmaya, hastalıkların ilerlemesini önlemeye yardımcı olur. Böğürtlen yaprağının dikkat çeken bir diğer faydası ise enfeksiyonlara bağlı olarak oluşan ağız yaralarının iyileşmesine yardımcı olmasıdır. Doğal bir antioksidan olmasıyla öne çıkan böğürtlen yaprağı, vücuttaki toksinlerin atılmasını kolaylaştırır. Böğürtlen yaprağı E vitamini bakımından oldukça zengindir. Ciltte yaşlanmayı geciktirmek için destek olan E vitamini, göz sağlığını korumaya ve hormonal düzeni sağlamaya da yardımcı olur</p>';
+            } else if (plantId === 'plant2') { 
+                content = '<img src="RESIM/DEVE DİKENİ.PNG" alt="DEVE DİKENİ" style="width:80%; margin-bottom: 20px;"><p>Deve dikeni bitkisi ile elde edilen yağların ve çayın birçok faydası olduğu bilinir. Peki deve dikeni bitkisinin genel faydaları nelerdir? Bitkinin insan sağlığı üzerindeki genel faydalarını şu şekilde sıralamak doğru olur; deve dikeni, kemik gelişimini destekler ve solunum yolu rahatsızlıklarının iyileşme sürecini hızlandırır. Aynı zamanda deve dikeni bitkisinin hafızayı güçlendirdiği de bilinir. Bunların haricinde ise bitki; cilt problemlerine iyi gelir, saçların daha bakımlı olmasına yardımcıdır ve karaciğer problemleri açısından faydalıdır. Bitkinin diğer faydaları ise şu şekilde bilinir; Siroza ve sarılık hastalığına iyi gelir Hepatit hastalarının sağlığını koruyucu özellikleri vardır Şeker hastaları için fayda sağlar Cildi besler Akne tedavisinde kullanılır Böbrek hasarını önler Mevsimsel alerjilerin tedavisinde destekleyicidir Parkinson hastalığı için fayda sağlar Kanserli hücreler ile mücadele eder Yüksek kolesterol için faydalıdır Anne sütünü arttırıcı özelliği bulunur İdrar yolu problemlerine iyi gelir</p>';
+            } 
+
+            document.getElementById('plant-info-content').innerHTML = content;
+            document.getElementById('submenu-modal').style.display = 'none';
+            document.getElementById('plant-info-modal').style.display = 'block';
+        }
+        document.getElementById('overlay').onclick = closeModal;
+    </script>
+</body>
+</html>

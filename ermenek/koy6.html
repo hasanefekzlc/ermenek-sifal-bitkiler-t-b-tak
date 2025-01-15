@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            color: #333;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .baslık {
+            margin-top: 20px;
+            font-size: 2em;
+            color: #555;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 60%;
+        }
+        .image {
+            width: 40%;
+            height: auto;
+            margin-right: 15px;
+            border-radius: 5px;
+        }
+        .button {
+            margin-left: 20px;
+            padding: 10px 20px;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .button:hover {
+            background: #0056b3;
+        }
+        .modal, .submenu-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            width: 80%;
+            max-width: 600px;
+            overflow-y: auto; /* İçeriğin kaymasını sağlar */
+            max-height: 80vh; /* Modalin yüksekliğini sınırlayıp kaydırma alanı sağlar */
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .submenu {
+            list-style: none;
+            padding: 0;
+        }
+        .submenu li {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            margin: 5px 0;
+            padding: 5px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .submenu li img {
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            border-radius: 5px;
+        }
+        .submenu li:hover {
+            background: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="baslık">
+        <text>ÇAMLICA</text>
+    </div>
+    <div class="container">
+        <div class="item">
+            <img src="RESIM/cografı ozelik.png" alt="Resim 1" class="image">
+            <button class="button" onclick="showModal(1)">COGRAFİ OZELİGİ</button>
+        </div>
+        <div class="item">
+            <img src="RESIM/tarih.png" alt="Resim 2" class="image">
+            <button class="button" onclick="showModal(2)">TARİHİ</button>
+        </div>
+        <div class="item">
+            <img src="RESIM/bitki.png" alt="Resim 3" class="image">
+            <button class="button" onclick="showSubMenu()">YATİSEN BİTKİLER</button>
+        </div>
+    </div>
+    
+    <div id="modal1" class="modal">
+        <button class="close-btn" onclick="closeModal()">✖</button>
+        <p>Köy, Karaman il merkezine 139 km, Ermenek ilçe merkezine 20 km uzaklıktadır.</p>
+    </div>
+    <div id="modal2" class="modal">
+        <button class="close-btn" onclick="closeModal()">✖</button>
+        <p>Köyün adı, 1522 yılı kayıtlarında Mihaller olarak geçmektedir.</p>
+    </div>
+    <div id="submenu-modal" class="modal submenu-modal">
+        <button class="close-btn" onclick="closeModal()">✖</button>
+        <ul class="submenu">
+            <li onclick="showPlantInfo('plant1')"><img src="RESIM/ihlamur.png" alt="Bitki 1"> İHLAMUR</li>
+            <li onclick="showPlantInfo('plant2')"><img src="RESIM/ADACAYI.PNG" alt="Bitki 2">ADAÇAYI</li>
+        </ul>
+    </div>
+    <div id="plant-info-modal" class="modal">
+        <button class="close-btn" onclick="closeModal()">✖</button>
+        <div id="plant-info-content"></div>
+    </div>
+    <div class="overlay" id="overlay"></div>
+
+    <script>
+        function showModal(id) {
+            // Modal ve overlay'i göster
+            document.getElementById('modal' + id).style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+        function closeModal() {
+            // Modal ve overlay'i gizle
+            document.querySelectorAll('.modal').forEach(function(modal) {
+                modal.style.display = 'none';
+            });
+            document.getElementById('overlay').style.display = 'none';
+        }
+        function showSubMenu() {
+            // Alt menüyü göster
+            document.getElementById('submenu-modal').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+        }
+        function showPlantInfo(plantId) {
+            // Bitki bilgilerini göster
+            let content = '';
+            if (plantId === 'plant1') {
+                content = '<img src="RESIM/ihlamur.png" alt="İHLAMUR" style="width:80%; margin-bottom: 20px;"><p>İhlamur, Tilia cinsine ait bir ağaç türüdür ve geleneksel olarak sağlık alanında kullanılır. Özellikle çiçekleri, sakinleştirici, rahatlatıcı ve antienflamatuar özelliklere sahip olup, halk arasında soğuk algınlığı, öksürük, baş ağrısı gibi rahatsızlıkların tedavisinde tercih edilir. İhlamurun içeriğindeki flavonoidler ve tanenler, vücutta rahatlatıcı etkiler yaratırken, uyku sorunlarına da iyi gelir. Günümüzde, ihlamur tıbbi ve kozmetik sektörde de kullanılır. Bitkisel ilaçlar, çaylar ve cilt bakım ürünlerinde yaygın olarak yer alır. Ayrıca, aromaterapi alanında da stresi azaltıcı etkileriyle tercih edilmektedir.</p>';
+            } else if (plantId === 'plant2') {
+                content = '<img src="RESIM/ADACAYI.PNG" alt="ADAÇAYI" style="width:80%; margin-bottom: 20px;"><p>Adaçayı (Salvia Officinalis L.) önemli farmakolojik aktivitelere sahip bileşenleri içeren bir bitkidir. Eski çağlardan beri parfümlerde kullanılmış, lezzet vermek amacıyla yiyeceklere eklenmiş ve günlük beslenmede tedavi amaçlı yer almıştır. “Salvia” kelimesi “iyileşmek için” anlamına gelir. Orta Doğu ve Akdeniz’e özgü aromatik bir bitki olan adaçayı; Avrupa’da geleneksel tıpta sindirim sistemi rahatsızlıkları, öksürük ve bronşit, fazla terleme, yaşa bağlı kognitif hastalıklar, boğaz ağrısı ve deri iltihaplanmasında kullanılmaktadır.Adaçayı, K vitamini açısından oldukça zengin olan, A, E ve C vitaminleri, magnezyum, çinko ve bakır gibi minerallerde içeren 160 dan fazla polifenol içerir. Adaçayı ağız sağlığını iyileştirmeye, kolesterolü ve kan şekerini düşürmeye ve beyin fonksiyonlarını geliştirmeye, menopoza bağlı sıcak basması gibi semptomları azaltmaya yardım eder. </p>';
+            } 
+
+            document.getElementById('plant-info-content').innerHTML = content;
+            document.getElementById('submenu-modal').style.display = 'none';
+            document.getElementById('plant-info-modal').style.display = 'block';
+        }
+        document.getElementById('overlay').onclick = closeModal;
+    </script>
+</body>
+</html>
